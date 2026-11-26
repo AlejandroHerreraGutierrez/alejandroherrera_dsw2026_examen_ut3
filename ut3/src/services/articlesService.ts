@@ -18,12 +18,29 @@ export interface ArticleChanges {
 // The in-memory array now lives here, not in the routes.
 const articles: Article[] = [];
 
-export function list(page: number, limit: number) {
+export function list(page: number, limit: number, sinDescripcion: number,) {
+  let filteredArticles: Article[] = [];
   const start = (page - 1) * limit;
-  return {
-    data: articles.slice(start, start + limit),
-    pagination: { page, limit, total: articles.length },
-  };
+
+  //si "sinDescripcion" vale 1 realizamos el filtrado
+  if (sinDescripcion == 1) {
+    filteredArticles= articles.filter(
+      (article) => article.description == "Sin descripción",
+    );
+
+    return {
+      data: filteredArticles.slice(start, start + limit),
+      pagination: { page, limit, total: filteredArticles.length },
+    };
+    //si "sinDescripcion" es distinto a 1 realizamos la paginacion sin cambios
+  } else {
+
+    return {
+      data: articles.slice(start, start + limit),
+      pagination: { page, limit, total: articles.length },
+    };
+  }
+  
 }
 
 export function getById(id: string): Article | undefined {
